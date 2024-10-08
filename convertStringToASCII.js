@@ -35,6 +35,21 @@ console.log("The input string as an array of binary characters is", inputStringB
 console.log("The key as an array of binary characters is", keyBinaryArray)
 
 
-let encrypt = function(inputStringBinaryArray, keyBinaryArray){
-  
+function splitBinaryArray(inputArray) {
+  return inputArray.reduce((resultArray, item, index) => {
+    const blockIndex = Math.floor(index / 5);
+    if (!resultArray[blockIndex]) {
+      resultArray[blockIndex] = []; 
+    }
+    resultArray[blockIndex].push(item);
+    return resultArray;
+  }, []);
 }
+
+const inputStringSplitBinaryArray = splitBinaryArray(inputStringBinaryArray);
+console.log("The input string binary array split into blocks of 5 ASCII characters is", inputStringSplitBinaryArray); 
+
+const keySplitBinaryArray = splitBinaryArray(keyBinaryArray);
+console.log("The key binary array split into blocks of 5 ASCII characters is ", keyBinaryArray); 
+
+
