@@ -47,12 +47,13 @@ function splitBinaryArray(inputArray) {
 }
 
 const inputStringSplitBinaryArray = splitBinaryArray(inputStringBinaryArray);
-console.log("The input string binary array split into blocks of 5 ASCII characters is", inputStringSplitBinaryArray); 
+console.log("The input string binary array split into subarrays of 5 ASCII characters is", inputStringSplitBinaryArray); 
 
 const keySplitBinaryArray = splitBinaryArray(keyBinaryArray);
-console.log("The key binary array split into blocks of 5 ASCII characters is ", keyBinaryArray); 
+console.log("The key binary array split into subarrays of 5 ASCII characters is ", keyBinaryArray); 
 
 
 function encrypt(inputStringSplitBinaryArray, keySplitBinaryArray){
+  const shiftedInputStringSplitBinaryArray = []
   
 }
