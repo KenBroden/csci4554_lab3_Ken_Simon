@@ -1,4 +1,3 @@
-
 let str = "hello";
 console.log("INPUT STRING:'" + str + "'")
 
@@ -36,6 +35,6 @@ console.log("The input string as an array of binary characters is", inputStringB
 console.log("The key as an array of binary characters is", keyBinaryArray)
 
 
-let encrypt = function(binaryArray){
-
+let encrypt = function(inputStringBinaryArray, keyBinaryArray){
+  
 }
