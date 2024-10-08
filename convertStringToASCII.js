@@ -53,3 +53,6 @@ const keySplitBinaryArray = splitBinaryArray(keyBinaryArray);
 console.log("The key binary array split into blocks of 5 ASCII characters is ", keyBinaryArray); 
 
 
+function encrypt(inputStringSplitBinaryArray, keySplitBinaryArray){
+  
+}
