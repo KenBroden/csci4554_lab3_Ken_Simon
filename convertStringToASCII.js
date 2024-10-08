@@ -1,7 +1,7 @@
-let str = "hello";
+let str = "hello2";
 console.log("INPUT STRING:'" + str + "'")
 
-let key = "a5Z#\t";
+let key = "a5Z#\t2";
 console.log("KEY:'" + key  + "'")
 
 // Converting a string to an array of ASCII decimal characters
@@ -50,7 +50,7 @@ const inputStringSplitBinaryArray = splitBinaryArray(inputStringBinaryArray);
 console.log("The input string binary array split into subarrays of 5 ASCII characters is", inputStringSplitBinaryArray); 
 
 const keySplitBinaryArray = splitBinaryArray(keyBinaryArray);
-console.log("The key binary array split into subarrays of 5 ASCII characters is ", keyBinaryArray); 
+console.log("The key binary array split into subarrays of 5 ASCII characters is ", keySplitBinaryArray); 
 
 
 function encrypt(inputStringSplitBinaryArray, keySplitBinaryArray){
