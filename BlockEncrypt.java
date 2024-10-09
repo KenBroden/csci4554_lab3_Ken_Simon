@@ -34,8 +34,9 @@ public class BlockEncrypt {
     // XOR two binary strings
     public static String bitwiseXOR(String block, String key) {
         StringBuilder result = new StringBuilder();
+        int keyLength = key.length();
         for (int i = 0; i < block.length(); i++) {
-            result.append(block.charAt(i) ^ key.charAt(i));
+            result.append(block.charAt(i) ^ key.charAt(i % keyLength));
         }
         return result.toString();
     }
@@ -91,7 +92,8 @@ public class BlockEncrypt {
     public static List<String> ECBMode(List<String> inputBlocks, String key) {
         List<String> encryptedBlocks = new ArrayList<>();
         for (String block : inputBlocks) {
-            String encryptedBlock = encryptBlock(block, key);
+            String paddedBlock = padBlock(block);
+            String encryptedBlock = encryptBlock(paddedBlock, key);
             encryptedBlocks.add(encryptedBlock);
         }
         return encryptedBlocks;
@@ -105,6 +107,7 @@ public class BlockEncrypt {
         String previousBlock = iv;
         for (String block : inputBlocks) {
             block = bitwiseXOR(block, previousBlock);
+            block = padBlock(block);
             String encryptedBlock = encryptBlock(block, key);
             encryptedBlocks.add(encryptedBlock);
             previousBlock = encryptedBlock;
@@ -128,6 +131,7 @@ public class BlockEncrypt {
 
     // Output Feedback (OFB) mode
     // generates keystream blocks which are XORed with the plaintext blocks
+    // ** Does not require padding the last block **
     public static List<String> OFBMode(List<String> inputBlocks, String key, String iv) {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
@@ -143,6 +147,7 @@ public class BlockEncrypt {
     // Counter (CTR) mode
     // Counter value is combined with IV to create a unique counter block for each
     // plaintext block
+    // ** Does not require padding the last block **
     public static List<String> CTRMode(List<String> inputBlocks, String key, String iv) {
         List<String> encryptedBlocks = new ArrayList<>();
         int counter = 0;
