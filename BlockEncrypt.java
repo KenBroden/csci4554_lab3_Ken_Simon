@@ -91,7 +91,7 @@ public class BlockEncrypt {
     public static List<String> ECBMode(List<String> inputBlocks, String key) {
         List<String> encryptedBlocks = new ArrayList<>();
         for (String block : inputBlocks) {
-            String encryptedBlock = encrypt(block, key);
+            String encryptedBlock = encryptBlock(block, key);
             encryptedBlocks.add(encryptedBlock);
         }
         return encryptedBlocks;
@@ -105,7 +105,7 @@ public class BlockEncrypt {
         String previousBlock = iv;
         for (String block : inputBlocks) {
             block = bitwiseXOR(block, previousBlock);
-            String encryptedBlock = encrypt(block, key);
+            String encryptedBlock = encryptBlock(block, key);
             encryptedBlocks.add(encryptedBlock);
             previousBlock = encryptedBlock;
         }
@@ -118,7 +118,7 @@ public class BlockEncrypt {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
         for (String block : inputBlocks) {
-            String encryptedBlock = encrypt(previousBlock, key);
+            String encryptedBlock = encryptBlock(previousBlock, key);
             String cipherBlock = bitwiseXOR(block, encryptedBlock);
             encryptedBlocks.add(cipherBlock);
             previousBlock = cipherBlock;
@@ -132,7 +132,7 @@ public class BlockEncrypt {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
         for (String block : inputBlocks) {
-            String encryptedBlock = encrypt(previousBlock, key);
+            String encryptedBlock = encryptBlock(previousBlock, key);
             String cipherBlock = bitwiseXOR(block, encryptedBlock);
             encryptedBlocks.add(cipherBlock);
             previousBlock = encryptedBlock;
@@ -149,18 +149,11 @@ public class BlockEncrypt {
         for (String block : inputBlocks) {
             String counterBlock = iv + String.format("%16s", Integer.toBinaryString(counter)).replace(' ', '0');
             counterBlock = counterBlock.substring(counterBlock.length() - BLOCK_SIZE);
-            String encryptedBlock = encrypt(counterBlock, key);
+            String encryptedBlock = encryptBlock(counterBlock, key);
             String cipherBlock = bitwiseXOR(block, encryptedBlock);
             encryptedBlocks.add(cipherBlock);
             counter++;
         }
         return encryptedBlocks;
     }
-
-    public static String encrypt(String block, String key) {
-        // Implement the encryption logic here
-        // This is a placeholder implementation
-        return bitwiseXOR(block, key);
-    }
-
 }
