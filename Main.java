@@ -1,65 +1,29 @@
-import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-        @SuppressWarnings("resource")
-        Scanner scanner = new Scanner(System.in);
+        String key = "a5Z#\t"; // Example key
+        String plaintext = "Hello"; // Example plaintext
 
-        System.out.print("Enter mode (ECB, CBC, CFB, OFB, CTR): ");
-        String mode = scanner.nextLine();
+        // Convert plaintext and key to binary
+        String binaryPlaintext = BlockEncrypt.asciiToBinary(plaintext);
+        String binaryKey = BlockEncrypt.asciiToBinary(key);
 
-        System.out.print("Enter key (5 ASCII characters): ");
-        String key = scanner.nextLine();
+        // Encrypt the plaintext
+        String encrypted = BlockEncrypt.encryptBlock(binaryPlaintext, binaryKey);
+        System.out.println("Encrypted: " + encrypted);
 
-        System.out.print("Enter IV (35 binary digits) or leave blank to generate: ");
-        String iv = scanner.nextLine();
-        if (iv.isEmpty()) {
-            iv = BlockEncrypt.generateRandomIV();
-        }
+        // Decrypt the ciphertext
+        String decrypted = BlockEncrypt.decryptBlock(encrypted, binaryKey);
+        System.out.println("Decrypted: " + decrypted);
 
-        System.out.print("Enter input file path: ");
-        String inputFilePath = scanner.nextLine();
+        // Convert decrypted binary back to ASCII
+        String decryptedText = BlockEncrypt.binaryToAscii(decrypted);
+        System.out.println("Decrypted Text: " + decryptedText);
 
-        System.out.print("Enter output file path: ");
-        String outputFilePath = scanner.nextLine();
-
-        try {
-            String inputText = FileUtil.readFile(inputFilePath);
-            String inputBinary = BlockEncrypt.asciiToBinary(inputText);
-            List<String> inputBlocks = BlockEncrypt.splitBinaryArray(inputBinary);
-
-            List<String> encryptedBlocks;
-            switch (mode) {
-                case "ECB":
-                    encryptedBlocks = BlockEncrypt.ECBMode(inputBlocks, key);
-                    break;
-                case "CBC":
-                    encryptedBlocks = BlockEncrypt.CBCMode(inputBlocks, key, iv);
-                    break;
-                case "CFB":
-                    encryptedBlocks = BlockEncrypt.CFBMode(inputBlocks, key, iv);
-                    break;
-                case "OFB":
-                    encryptedBlocks = BlockEncrypt.OFBMode(inputBlocks, key, iv);
-                    break;
-                case "CTR":
-                    encryptedBlocks = BlockEncrypt.CTRMode(inputBlocks, key, iv);
-                    break;
-                default:
-                    System.out.println("Invalid mode");
-                    return;
-            }
-
-            StringBuilder encryptedText = new StringBuilder();
-            for (String block : encryptedBlocks) {
-                encryptedText.append(block).append("\n");
-            }
-            FileUtil.writeFile(outputFilePath, encryptedText.toString());
-            System.out.println("Encrypted text written to " + outputFilePath);
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Verify that the decrypted text matches the original plaintext
+        if (plaintext.equals(decryptedText)) {
+            System.out.println("Encryption and decryption successful!");
+        } else {
+            System.out.println("Encryption and decryption failed.");
         }
     }
 }

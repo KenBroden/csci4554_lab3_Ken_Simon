@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class BlockEncrypt {
     private static final int BLOCK_SIZE = 35;
-    //private static final int KEY_SIZE = 35;
+    // private static final int KEY_SIZE = 35;
 
     // Convert ascii to binary
     public static String asciiToBinary(String asciiString) {
@@ -12,14 +12,42 @@ public class BlockEncrypt {
         StringBuilder binary = new StringBuilder();
         for (byte b : bytes) {
             int val = b;
-            for (int i = 0; i < 8; i++) {
-                binary.append((val & 128) == 0 ? 0 : 1);
+            for (int i = 0; i < 7; i++) {
+                binary.append((val & 64) == 0 ? 0 : 1);
                 val <<= 1;
             }
         }
         return binary.toString();
     }
 
+    // Convert binary to ascii
+    public static String binaryToAscii(String binaryString) {
+        StringBuilder ascii = new StringBuilder();
+        for (int i = 0; i < binaryString.length(); i += 7) {
+            String byteString = binaryString.substring(i, i + 7);
+            int charCode = Integer.parseInt(byteString, 2);
+            ascii.append((char) charCode);
+        }
+        return ascii.toString();
+    }
+
+    // XOR two binary strings
+    public static String bitwiseXOR(String block, String key) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < block.length(); i++) {
+            result.append(block.charAt(i) ^ key.charAt(i));
+        }
+        return result.toString();
+    }
+
+    // Right circular shift by 3 bits
+    public static String rightCircularShift(String block, int shift) {
+        int len = block.length();
+        shift = shift % len;
+        return block.substring(len - shift) + block.substring(0, len - shift);
+    }
+
+    // generate a random 5 ascii
     public static String generateRandomIV() {
         Random random = new Random();
         StringBuilder iv = new StringBuilder();
@@ -29,6 +57,7 @@ public class BlockEncrypt {
         return iv.toString();
     }
 
+    // split binary array into blocks
     public static List<String> splitBinaryArray(String input) {
         List<String> blocks = new ArrayList<>();
         for (int i = 0; i < input.length(); i += BLOCK_SIZE) {
@@ -37,6 +66,19 @@ public class BlockEncrypt {
         return blocks;
     }
 
+    // Encrypt a block with the given key
+    public static String encryptBlock(String block, String key) {
+        block = rightCircularShift(block, 3);
+        return bitwiseXOR(block, key);
+    }
+
+    // Decrypt a block with the given key
+    public static String decryptBlock(String block, String key) {
+        block = bitwiseXOR(block, key);
+        return rightCircularShift(block, block.length() - 3);
+    }
+
+    // add padding / 0s to block
     public static String padBlock(String block) {
         while (block.length() < BLOCK_SIZE) {
             block += "0";
@@ -44,6 +86,8 @@ public class BlockEncrypt {
         return block;
     }
 
+    // Electronic Codebook (ECB) mode
+    // each block of plaintext is encrypted independently with the same key
     public static List<String> ECBMode(List<String> inputBlocks, String key) {
         List<String> encryptedBlocks = new ArrayList<>();
         for (String block : inputBlocks) {
@@ -53,6 +97,9 @@ public class BlockEncrypt {
         return encryptedBlocks;
     }
 
+    // Cipher Block Chaining (CBC) mode
+    // each block of plaintext is XORed with the previous ciphertext block before
+    // encryption
     public static List<String> CBCMode(List<String> inputBlocks, String key, String iv) {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
@@ -65,6 +112,8 @@ public class BlockEncrypt {
         return encryptedBlocks;
     }
 
+    // Cipher Feedback (CFB) mode
+    // each block of ciphertext is XORed with the output of the encryption function
     public static List<String> CFBMode(List<String> inputBlocks, String key, String iv) {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
@@ -77,6 +126,8 @@ public class BlockEncrypt {
         return encryptedBlocks;
     }
 
+    // Output Feedback (OFB) mode
+    // generates keystream blocks which are XORed with the plaintext blocks
     public static List<String> OFBMode(List<String> inputBlocks, String key, String iv) {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
@@ -89,6 +140,9 @@ public class BlockEncrypt {
         return encryptedBlocks;
     }
 
+    // Counter (CTR) mode
+    // Counter value is combined with IV to create a unique counter block for each
+    // plaintext block
     public static List<String> CTRMode(List<String> inputBlocks, String key, String iv) {
         List<String> encryptedBlocks = new ArrayList<>();
         int counter = 0;
@@ -109,11 +163,4 @@ public class BlockEncrypt {
         return bitwiseXOR(block, key);
     }
 
-    public static String bitwiseXOR(String block, String key) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < block.length(); i++) {
-            result.append(block.charAt(i) ^ key.charAt(i));
-        }
-        return result.toString();
-    }
 }
