@@ -53,7 +53,44 @@ const keySplitBinaryArray = splitBinaryArray(keyBinaryArray);
 console.log("The key binary array split into subarrays of 5 ASCII characters is ", keySplitBinaryArray); 
 
 
-function encrypt(inputStringSplitBinaryArray, keySplitBinaryArray){
-  const shiftedInputStringSplitBinaryArray = []
-  
+function encrypt(inputStringSplitBinaryArray, keySplitBinaryArray) {
+  var encryptedBlocks = [];
+  // for loop to iterate through the input string binary array
+  for (var i = 0; i < inputStringSplitBinaryArray.length; i++) {
+    var block = inputStringSplitBinaryArray[i];
+    var shiftedBlock = circularRightShift(block, 3);
+    var encryptedBlock = bitwiseXOR(shiftedBlock, keySplitBinaryArray[i]);
+    encryptedBlocks.push(encryptedBlock);
+  }
+  return encryptedBlocks;
 }
+
+// shift the input string binary array to the right by 3
+function circularRightShift(block, shift) {
+  return block.slice(-shift).concat(block.slice(0, -shift));
+}
+
+// XOR the input string binary array with the key binary array
+function bitwiseXOR(block, key) {
+  return block.map(function(bit, index) {
+    return bit ^ key[index];
+  });
+}
+
+function decrypt(encryptedBlocks, keySplitBinaryArray) {
+  var decryptedBlocks = [];
+  // for loop to iterate through the encrypted blocks
+  for (var i = 0; i < encryptedBlocks.length; i++) {
+    var block = encryptedBlocks[i];
+    var xorBlock = bitwiseXOR(block, keySplitBinaryArray[i]);
+    var decryptedBlock = circularRightShift(xorBlock, 32); // 35 - 3 = 32
+    decryptedBlocks.push(decryptedBlock);
+  }
+  return decryptedBlocks;
+}
+
+const encryptedBlocks = encrypt(inputStringSplitBinaryArray, keySplitBinaryArray);
+console.log("Encrypted blocks:", encryptedBlocks);
+
+const decryptedBlocks = decrypt(encryptedBlocks, keySplitBinaryArray);
+console.log("Decrypted blocks:", decryptedBlocks);
