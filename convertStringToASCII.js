@@ -49,11 +49,41 @@ function splitBinaryArray(inputArray) {
 const inputStringSplitBinaryArray = splitBinaryArray(inputStringBinaryArray);
 console.log("The input string binary array split into subarrays of 5 ASCII characters is", inputStringSplitBinaryArray); 
 
-const keySplitBinaryArray = splitBinaryArray(keyBinaryArray);
+let keySplitBinaryArray = splitBinaryArray(keyBinaryArray);
 console.log("The key binary array split into subarrays of 5 ASCII characters is ", keySplitBinaryArray); 
 
 
 function encrypt(inputStringSplitBinaryArray, keySplitBinaryArray){
-  const shiftedInputStringSplitBinaryArray = []
+  let shiftedInputStringSplitBinaryArray = inputStringSplitBinaryArray;
+  for(let i = 0; i < inputStringSplitBinaryArray.length; i++){
+    let lastThreeElements = [];
+    lastThreeElements += ((inputStringSplitBinaryArray[i][(inputStringSplitBinaryArray[i]).length - 1]).split()[0]).slice(-3);
+    shiftedInputStringSplitBinaryArray[i].unshift(lastThreeElements);
+    shiftedInputStringSplitBinaryArray[i][(inputStringSplitBinaryArray[i]).length - 1] = shiftedInputStringSplitBinaryArray[i][(inputStringSplitBinaryArray[i]).length - 1].slice(0, -3);
+  }
+  let shiftedArray = shiftedInputStringSplitBinaryArray;
+  let shiftedString = (shiftedArray.toString()).replace(/,/g, "")
+  let keyString = keySplitBinaryArray.toString().replace(/,/g, "")
+  console.log(keyString)
+  console.log(shiftedString)
+
+
+  let result = "";
+
+
+
+  for (let i = 0; i < shiftedString.length; i++) {
+    const charCode1 = shiftedString.charCodeAt(i);
+    const charCode2 = keyString.charCodeAt(i);
+    result += String.fromCharCode(charCode1 ^ charCode2);
+  }
+
+  return result;
   
+
+
 }
+
+
+console.log(encrypt(inputStringSplitBinaryArray, keySplitBinaryArray))
+
