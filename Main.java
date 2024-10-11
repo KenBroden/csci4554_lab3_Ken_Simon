@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         String key = "a5Z#\t"; // Example key
@@ -6,6 +8,8 @@ public class Main {
         // Convert plaintext and key to binary
         String binaryPlaintext = BlockEncrypt.asciiToBinary(plaintext);
         String binaryKey = BlockEncrypt.asciiToBinary(key);
+
+        System.out.println("\nTask 1: implementing block cipher\n");
 
         // Print the ascii encoding of the plaintext
         System.out.println("Plaintext: " + plaintext);
@@ -34,5 +38,32 @@ public class Main {
         } else {
             System.out.println("Encryption and decryption failed.");
         }
+
+        System.out.println("\nTask 2: implementing modes\n");
+
+        // Define the key and IV
+        String iv = BlockEncrypt.generateRandomIV();
+        System.out.println("IV: " + iv);
+
+        // Define a plain text [JUST FOR TESTING FOR NOW - Ken]
+        String plainText = "Hello World! I love cryptography!";
+        System.out.println("Plaintext: " + plainText);
+
+        // plaintext to binary
+        String binaryPlainText = BlockEncrypt.asciiToBinary(plainText);
+
+        // Encrypt the plaintext using CBC mode
+        List<String> encryptedBlocks = BlockEncrypt.CBCMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
+        System.out.println("CBCEncrypted Blocks: " + encryptedBlocks);
+
+        // Decrypt the CBC encrypted blocks
+        List<String> decryptedBlocks = BlockEncrypt.decryptCBCMode(encryptedBlocks, binaryKey, iv);
+        System.out.println("CBCDecrypted Blocks: " + decryptedBlocks);
+
+        // Convert the decrypted blocks back to ASCII
+        String cbcDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocks));
+        System.out.println("Decrypted Text: " + cbcDecryptedText);
+
+
     }
 }

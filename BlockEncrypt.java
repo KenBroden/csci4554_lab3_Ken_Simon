@@ -24,9 +24,11 @@ public class BlockEncrypt {
     public static String binaryToAscii(String binaryString) {
         StringBuilder ascii = new StringBuilder();
         for (int i = 0; i < binaryString.length(); i += 7) {
-            String byteString = binaryString.substring(i, i + 7);
-            int charCode = Integer.parseInt(byteString, 2);
-            ascii.append((char) charCode);
+            if (i + 7 <= binaryString.length()) {
+                String byteString = binaryString.substring(i, i + 7);
+                int charCode = Integer.parseInt(byteString, 2);
+                ascii.append((char) charCode);
+            }
         }
         return ascii.toString();
     }
@@ -87,6 +89,20 @@ public class BlockEncrypt {
         return block;
     }
 
+    // remove padding
+    public static String removePadding(String block) {
+        return block.replaceAll("0+$", "");
+    }
+
+    // Join binary array into a single string
+    public static String joinBinaryArray(List<String> blocks) {
+        StringBuilder joined = new StringBuilder();
+        for (String block : blocks) {
+            joined.append(block);
+        }
+        return joined.toString();
+    }
+
     // Electronic Codebook (ECB) mode
     // each block of plaintext is encrypted independently with the same key
     public static List<String> ECBMode(List<String> inputBlocks, String key) {
@@ -106,13 +122,29 @@ public class BlockEncrypt {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
         for (String block : inputBlocks) {
-            block = bitwiseXOR(block, previousBlock);
             block = padBlock(block);
+            block = bitwiseXOR(block, previousBlock);
             String encryptedBlock = encryptBlock(block, key);
             encryptedBlocks.add(encryptedBlock);
             previousBlock = encryptedBlock;
         }
         return encryptedBlocks;
+    }
+
+    // CBC decryption
+    public static List<String> decryptCBCMode(List<String> encryptedBlocks, String key, String iv) {
+        List<String> decryptedBlocks = new ArrayList<>();
+        String previousBlock = iv;
+        for (String block : encryptedBlocks) {
+            String decryptedBlock = decryptBlock(block, key);
+            decryptedBlock = bitwiseXOR(decryptedBlock, previousBlock);
+            decryptedBlocks.add(decryptedBlock);
+            previousBlock = block;
+        }
+        // Remove padding from the last block
+        int lastIndex = decryptedBlocks.size() - 1;
+        decryptedBlocks.set(lastIndex, removePadding(decryptedBlocks.get(lastIndex)));
+        return decryptedBlocks;
     }
 
     // Cipher Feedback (CFB) mode
