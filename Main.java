@@ -10,8 +10,8 @@ public class Main {
         String inputFilePath = "Text/turing_plaintext.txt"; // DEFINE THE FILE PATH HERE
 
         // Define key, generate IV, and read plaintext
-        String key = "LinusT"; // DEFINE THE KEY HERE
-        String iv = BlockEncrypt.generateRandomIV();
+        String key = "1111000 0101101 1100110 0001010 1000101"; // DEFINE THE KEY HERE
+        String iv = "1001001 0111001 1100000 0100101 1001010"; // DEFINE THE IV HERE
         String plaintext = "";
 
         try {
@@ -21,38 +21,49 @@ public class Main {
             return;
         }
 
-        String binaryKey = BlockEncrypt.asciiToBinary(key);
+        String binaryKey = BlockEncrypt.unformatBinaryString(key);
+        String binaryIV = BlockEncrypt.unformatBinaryString(iv);
         System.out.println("IV: " + iv);
+        System.out.println("Key: " + key);
         // System.out.println("Plaintext: " + plaintext);
 
         // plaintext to binary
         String binaryPlainText = BlockEncrypt.asciiToBinary(plaintext);
 
         // Choose modes to encrypt with
-        String[] modes = { "CBC", "ECB", "CFB", "OFB", "CTR" }; // DEFINE THE MODES HERE
+        String[] modes = { "CBC" }; // DEFINE THE MODES HERE
 
         // Encrypt using the chosen modes
         for (String mode : modes) {
-            processEncryptionMode(mode.trim(), binaryPlainText, binaryKey, iv, inputFilePath);
+            processEncryptionMode(mode.trim(), binaryPlainText, binaryKey, binaryIV, inputFilePath);
         }
 
         // Decryption process
         String encryptedFilePath = "Text/jaydon_CBC_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
         String decryptionMode = "CBC"; // DEFINE THE DECRYPTION MODE HERE
-        String decryptionIV = "1001001 0111001 1100000 0100101 1001010"; // DEFINE THE IV USED FOR ENCRYPTION HERE
-        @SuppressWarnings("unused")
-        String decryptionBinaryKey = "1111000 0101101 1100110 0001010 1000101"; // DEFINE THE KEY USED FOR ENCRYPTION HERE
+        String decryptionIV = "10010010111001110000001001011001010"; // DEFINE THE IV USED FOR ENCRYPTION HERE
+        String decryptionBinaryKey = "11110000101101110011000010101000101"; // DEFINE THE KEY USED FOR ENCRYPTION
+  
+
 
         String encryptedText = "";
         try {
             encryptedText = new String(Files.readAllBytes(Paths.get(encryptedFilePath)));
+            
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
 
-        List<String> encryptedBlocks = BlockEncrypt.splitBinaryArray(encryptedText);
-        processDecryptionMode(decryptionMode, encryptedBlocks, binaryKey, decryptionIV, encryptedFilePath);
+        // Validate the binary string
+        validateBinaryString(encryptedText);
+
+       // format to an array of 35 bit blocks
+        List<String> encryptedBlocks = BlockEncrypt.convertFormattedBinaryToBlocks(encryptedText);
+
+        // encrypted block array
+        System.out.println("Encrypted Blocks: " + encryptedBlocks);
+        processDecryptionMode(decryptionMode, encryptedBlocks, decryptionBinaryKey, decryptionIV, encryptedFilePath);
     }
 
     private static void processEncryptionMode(String mode, String binaryPlainText, String binaryKey, String iv,
@@ -84,16 +95,17 @@ public class Main {
 
         // Write the encrypted data to a file
         String encryptedText = BlockEncrypt.joinBinaryArray(encryptedBlocks);
+        String formattedEncryptedText = BlockEncrypt.formatBinaryString(encryptedText);
         try {
-            Files.write(Paths.get(encryptedFilePath), encryptedText.getBytes(), StandardOpenOption.CREATE);
+            Files.write(Paths.get(encryptedFilePath), formattedEncryptedText.getBytes(), StandardOpenOption.CREATE);
             System.out.println(mode + " Encrypted Blocks written to: " + encryptedFilePath);
         } catch (IOException e) {
             System.err.println("Error writing the encrypted file: " + e.getMessage());
         }
     }
 
-    private static void processDecryptionMode(String mode, List<String> encryptedBlocks, String decryptionBinaryKey, String iv,
-            String encryptedFilePath) {
+    private static void processDecryptionMode(String mode, List<String> encryptedBlocks, String decryptionBinaryKey,
+            String iv, String encryptedFilePath) {
         List<String> decryptedBlocks = null;
         String filePrefix = encryptedFilePath.substring(encryptedFilePath.lastIndexOf('/') + 1,
                 encryptedFilePath.indexOf('_'));
@@ -121,7 +133,10 @@ public class Main {
         }
 
         // Convert the decrypted blocks back to ASCII
-        String decryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocks));
+        String joinedDecryptedBlocks = BlockEncrypt.joinBinaryArray(decryptedBlocks);
+        System.out.println("Joined Decrypted Blocks: " + joinedDecryptedBlocks);
+        validateBinaryString(joinedDecryptedBlocks); // Validate the joined decrypted blocks
+        String decryptedText = BlockEncrypt.binaryToAscii(joinedDecryptedBlocks);
 
         // Write the decrypted data to a file
         try {
@@ -130,5 +145,31 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Error writing the decrypted file: " + e.getMessage());
         }
+
+        // Format the decrypted blocks and write to a file
+        String formattedDecryptedBlocks = BlockEncrypt.formatBinaryString(joinedDecryptedBlocks);
+        String formattedDecryptedFilePath = "Text/" + filePrefix + "_" + mode + "_formatted_decryption.txt";
+        try {
+            Files.write(Paths.get(formattedDecryptedFilePath), formattedDecryptedBlocks.getBytes(),
+                    StandardOpenOption.CREATE);
+            System.out.println(mode + " Formatted Decrypted Blocks written to: " + formattedDecryptedFilePath);
+        } catch (IOException e) {
+            System.err.println("Error writing the formatted decrypted file: " + e.getMessage());
+        }
+    }
+
+    private static void validateBinaryString(String binaryString) {
+        String unformattedBinaryString = BlockEncrypt.unformatBinaryString(binaryString);
+        System.out.println("Unformatted Binary String: " + unformattedBinaryString);
+        for (int i = 0; i < unformattedBinaryString.length(); i += 7) {
+            String segment = unformattedBinaryString.substring(i, Math.min(i + 7, unformattedBinaryString.length()));
+            try {
+                Integer.parseInt(segment, 2);
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid binary segment: " + segment + " at position " + i);
+                return;
+            }
+        }
+        System.out.println("All binary segments are valid.");
     }
 }
