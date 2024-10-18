@@ -1,115 +1,134 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String key = "a5Z#\t"; // Example key
-        String plaintext = "Hello"; // Example plaintext
+        // Define the file path to encrypt
+        String inputFilePath = "Text/turing_plaintext.txt"; // DEFINE THE FILE PATH HERE
 
-        // Convert plaintext and key to binary
-        String binaryPlaintext = BlockEncrypt.asciiToBinary(plaintext);
-        String binaryKey = BlockEncrypt.asciiToBinary(key);
+        // Define key, generate IV, and read plaintext
+        String key = "LinusT"; // DEFINE THE KEY HERE
+        String iv = BlockEncrypt.generateRandomIV();
+        String plaintext = "";
 
-        System.out.println("\nTask 1: implementing block cipher\n");
-
-        // Print the ascii encoding of the plaintext
-        System.out.println("Plaintext: " + plaintext);
-        System.out.println("Plaintext in binary: " + binaryPlaintext);
-
-        // After right shift
-        String rightShift = BlockEncrypt.rightCircularShift(binaryPlaintext, 3);
-        System.out.println("Right Shift: " + rightShift);
-
-        // key in binary
-        System.out.println("Key in binary: " + binaryKey);
-
-        // add the key bitwise after right shift
-        String xor = BlockEncrypt.bitwiseXOR(rightShift, binaryKey);
-        System.out.println("XOR: " + xor);
-
-        // Encrypt the plaintext
-        String encrypted = BlockEncrypt.encryptBlock(binaryPlaintext, binaryKey);
-        // Decrypt the ciphertext
-        String decrypted = BlockEncrypt.decryptBlock(encrypted, binaryKey);
-        // Convert decrypted binary back to ASCII
-        String decryptedText = BlockEncrypt.binaryToAscii(decrypted);
-        // Verify that the decrypted text matches the original plaintext
-        if (plaintext.equals(decryptedText)) {
-            System.out.println("Encryption and decryption successful!");
-        } else {
-            System.out.println("Encryption and decryption failed.");
+        try {
+            plaintext = new String(Files.readAllBytes(Paths.get(inputFilePath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
         }
 
-        System.out.println("\nTask 2: implementing modes\n");
-
-        // Define the key and IV
-        String iv = BlockEncrypt.generateRandomIV();
+        String binaryKey = BlockEncrypt.asciiToBinary(key);
         System.out.println("IV: " + iv);
-
-        // Define a plain text [JUST FOR TESTING FOR NOW - Ken]
-        String plainText = "Hello World! I love cryptography!";
-        System.out.println("Plaintext: " + plainText);
+        // System.out.println("Plaintext: " + plaintext);
 
         // plaintext to binary
-        String binaryPlainText = BlockEncrypt.asciiToBinary(plainText);
+        String binaryPlainText = BlockEncrypt.asciiToBinary(plaintext);
 
-        // Encrypt the plaintext using CBC mode
-        List<String> encryptedBlocks = BlockEncrypt.CBCMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
-        System.out.println("\nCBCEncrypted Blocks: " + encryptedBlocks);
+        // Choose modes to encrypt with
+        String[] modes = { "CBC", "ECB", "CFB", "OFB", "CTR" }; // DEFINE THE MODES HERE
 
-        // Decrypt the CBC encrypted blocks
-        List<String> decryptedBlocks = BlockEncrypt.decryptCBCMode(encryptedBlocks, binaryKey, iv);
-        System.out.println("CBCDecrypted Blocks: " + decryptedBlocks);
+        // Encrypt using the chosen modes
+        for (String mode : modes) {
+            processEncryptionMode(mode.trim(), binaryPlainText, binaryKey, iv, inputFilePath);
+        }
+
+        // Decryption process
+        String encryptedFilePath = "Text/jaydon_CBC_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
+        String decryptionMode = "CBC"; // DEFINE THE DECRYPTION MODE HERE
+        String decryptionIV = "1001001 0111001 1100000 0100101 1001010"; // DEFINE THE IV USED FOR ENCRYPTION HERE
+        @SuppressWarnings("unused")
+        String decryptionBinaryKey = "1111000 0101101 1100110 0001010 1000101"; // DEFINE THE KEY USED FOR ENCRYPTION HERE
+
+        String encryptedText = "";
+        try {
+            encryptedText = new String(Files.readAllBytes(Paths.get(encryptedFilePath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        List<String> encryptedBlocks = BlockEncrypt.splitBinaryArray(encryptedText);
+        processDecryptionMode(decryptionMode, encryptedBlocks, binaryKey, decryptionIV, encryptedFilePath);
+    }
+
+    private static void processEncryptionMode(String mode, String binaryPlainText, String binaryKey, String iv,
+            String inputFilePath) {
+        List<String> encryptedBlocks = null;
+        String filePrefix = inputFilePath.substring(inputFilePath.lastIndexOf('/') + 1, inputFilePath.indexOf('_'));
+        String encryptedFilePath = "Text/" + filePrefix + "_" + mode + "_ciphertext.txt";
+
+        switch (mode) {
+            case "CBC":
+                encryptedBlocks = BlockEncrypt.CBCMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
+                break;
+            case "ECB":
+                encryptedBlocks = BlockEncrypt.ECBMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey);
+                break;
+            case "CFB":
+                encryptedBlocks = BlockEncrypt.CFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
+                break;
+            case "OFB":
+                encryptedBlocks = BlockEncrypt.OFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
+                break;
+            case "CTR":
+                encryptedBlocks = BlockEncrypt.CTRMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
+                break;
+            default:
+                System.out.println("Invalid mode selected.");
+                return;
+        }
+
+        // Write the encrypted data to a file
+        String encryptedText = BlockEncrypt.joinBinaryArray(encryptedBlocks);
+        try {
+            Files.write(Paths.get(encryptedFilePath), encryptedText.getBytes(), StandardOpenOption.CREATE);
+            System.out.println(mode + " Encrypted Blocks written to: " + encryptedFilePath);
+        } catch (IOException e) {
+            System.err.println("Error writing the encrypted file: " + e.getMessage());
+        }
+    }
+
+    private static void processDecryptionMode(String mode, List<String> encryptedBlocks, String decryptionBinaryKey, String iv,
+            String encryptedFilePath) {
+        List<String> decryptedBlocks = null;
+        String filePrefix = encryptedFilePath.substring(encryptedFilePath.lastIndexOf('/') + 1,
+                encryptedFilePath.indexOf('_'));
+        String decryptedFilePath = "Text/" + filePrefix + "_" + mode + "_decryption.txt";
+
+        switch (mode) {
+            case "CBC":
+                decryptedBlocks = BlockEncrypt.decryptCBCMode(encryptedBlocks, decryptionBinaryKey, iv);
+                break;
+            case "ECB":
+                decryptedBlocks = BlockEncrypt.decryptECBMode(encryptedBlocks, decryptionBinaryKey);
+                break;
+            case "CFB":
+                decryptedBlocks = BlockEncrypt.decryptCFBMode(encryptedBlocks, decryptionBinaryKey, iv);
+                break;
+            case "OFB":
+                decryptedBlocks = BlockEncrypt.decryptOFBMode(encryptedBlocks, decryptionBinaryKey, iv);
+                break;
+            case "CTR":
+                decryptedBlocks = BlockEncrypt.decryptCTRMode(encryptedBlocks, decryptionBinaryKey, iv);
+                break;
+            default:
+                System.out.println("Invalid mode selected.");
+                return;
+        }
 
         // Convert the decrypted blocks back to ASCII
-        String cbcDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocks));
-        System.out.println("CBCDecrypted Text: " + cbcDecryptedText);
+        String decryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocks));
 
-        // Encrypt the plaintext using ECB mode
-        List<String> encryptedBlocksECB = BlockEncrypt.ECBMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey);
-        System.out.println("\nECBEncrypted Blocks: " + encryptedBlocksECB);
-
-        // Decrypt the ECB encrypted blocks
-        List<String> decryptedBlocksECB = BlockEncrypt.decryptECBMode(encryptedBlocksECB, binaryKey);
-        System.out.println("ECBDecrypted Blocks: " + decryptedBlocksECB);
-
-        // Convert the decrypted blocks back to ASCII
-        String ecbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksECB));
-        System.out.println("ECBDecrypted Text: " + ecbDecryptedText);
-
-        // Encrypt the plaintext using CFB mode
-        List<String> encryptedBlocksCFB = BlockEncrypt.CFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
-        System.out.println("\nCFBEncrypted Blocks: " + encryptedBlocksCFB);
-
-        // Decrypt the CFB encrypted blocks
-        List<String> decryptedBlocksCFB = BlockEncrypt.decryptCFBMode(encryptedBlocksCFB, binaryKey, iv);
-        System.out.println("CFBDecrypted Blocks: " + decryptedBlocksCFB);
-
-        // Convert the decrypted blocks back to ASCII
-        String cfbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksCFB));
-        System.out.println("CFBDecrypted Text: " + cfbDecryptedText);
-
-        // Encrypt the plaintext using OFB mode
-        List<String> encryptedBlocksOFB = BlockEncrypt.OFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
-        System.out.println("\nOFBEncrypted Blocks: " + encryptedBlocksOFB);
-
-        // Decrypt the OFB encrypted blocks
-        List<String> decryptedBlocksOFB = BlockEncrypt.decryptOFBMode(encryptedBlocksOFB, binaryKey, iv);
-        System.out.println("OFBDecrypted Blocks: " + decryptedBlocksOFB);
-
-        // Convert the decrypted blocks back to ASCII
-        String ofbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksOFB));
-        System.out.println("OFBDecrypted Text: " + ofbDecryptedText);
-
-        // Encrypt the plaintext using CTR mode
-        List<String> encryptedBlocksCTR = BlockEncrypt.CTRMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
-        System.out.println("\nCTREncrypted Blocks: " + encryptedBlocksCTR);
-
-        // Decrypt the CTR encrypted blocks
-        List<String> decryptedBlocksCTR = BlockEncrypt.decryptCTRMode(encryptedBlocksCTR, binaryKey, iv);
-        System.out.println("CTRDecrypted Blocks: " + decryptedBlocksCTR);
-
-        // Convert the decrypted blocks back to ASCII
-        String ctrDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksCTR));
-        System.out.println("CTRDecrypted Text: " + ctrDecryptedText);
+        // Write the decrypted data to a file
+        try {
+            Files.write(Paths.get(decryptedFilePath), decryptedText.getBytes(), StandardOpenOption.CREATE);
+            System.out.println(mode + " Decrypted Text written to: " + decryptedFilePath);
+        } catch (IOException e) {
+            System.err.println("Error writing the decrypted file: " + e.getMessage());
+        }
     }
 }
