@@ -87,5 +87,29 @@ public class Main {
         // Convert the decrypted blocks back to ASCII
         String cfbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksCFB));
         System.out.println("CFBDecrypted Text: " + cfbDecryptedText);
+
+        // Encrypt the plaintext using OFB mode
+        List<String> encryptedBlocksOFB = BlockEncrypt.OFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
+        System.out.println("\nOFBEncrypted Blocks: " + encryptedBlocksOFB);
+
+        // Decrypt the OFB encrypted blocks
+        List<String> decryptedBlocksOFB = BlockEncrypt.decryptOFBMode(encryptedBlocksOFB, binaryKey, iv);
+        System.out.println("OFBDecrypted Blocks: " + decryptedBlocksOFB);
+
+        // Convert the decrypted blocks back to ASCII
+        String ofbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksOFB));
+        System.out.println("OFBDecrypted Text: " + ofbDecryptedText);
+
+        // Encrypt the plaintext using CTR mode
+        List<String> encryptedBlocksCTR = BlockEncrypt.CTRMode(BlockEncrypt.splitBinaryArray(binaryPlainText), binaryKey, iv);
+        System.out.println("\nCTREncrypted Blocks: " + encryptedBlocksCTR);
+
+        // Decrypt the CTR encrypted blocks
+        List<String> decryptedBlocksCTR = BlockEncrypt.decryptCTRMode(encryptedBlocksCTR, binaryKey, iv);
+        System.out.println("CTRDecrypted Blocks: " + decryptedBlocksCTR);
+
+        // Convert the decrypted blocks back to ASCII
+        String ctrDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksCTR));
+        System.out.println("CTRDecrypted Text: " + ctrDecryptedText);
     }
 }

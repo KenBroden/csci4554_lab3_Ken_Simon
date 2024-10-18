@@ -198,12 +198,25 @@ public class BlockEncrypt {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
         for (String block : inputBlocks) {
-            String encryptedBlock = encryptBlock(previousBlock, key);
-            String cipherBlock = bitwiseXOR(block, encryptedBlock);
+            String keystreamBlock = encryptBlock(previousBlock, key);
+            String cipherBlock = bitwiseXOR(block, keystreamBlock);
             encryptedBlocks.add(cipherBlock);
-            previousBlock = encryptedBlock;
+            previousBlock = keystreamBlock;
         }
         return encryptedBlocks;
+    }
+
+    // OFB decryption
+    public static List<String> decryptOFBMode(List<String> encryptedBlocks, String key, String iv) {
+        List<String> decryptedBlocks = new ArrayList<>();
+        String previousBlock = iv;
+        for (String block : encryptedBlocks) {
+            String keystreamBlock = encryptBlock(previousBlock, key);
+            String decryptedBlock = bitwiseXOR(block, keystreamBlock);
+            decryptedBlocks.add(decryptedBlock);
+            previousBlock = keystreamBlock;
+        }
+        return decryptedBlocks;
     }
 
     // Counter (CTR) mode
@@ -222,5 +235,20 @@ public class BlockEncrypt {
             counter++;
         }
         return encryptedBlocks;
+    }
+
+    // CTR decryption
+    public static List<String> decryptCTRMode(List<String> encryptedBlocks, String key, String iv) {
+        List<String> decryptedBlocks = new ArrayList<>();
+        int counter = 0;
+        for (String block : encryptedBlocks) {
+            String counterBlock = iv + String.format("%16s", Integer.toBinaryString(counter)).replace(' ', '0');
+            counterBlock = counterBlock.substring(counterBlock.length() - BLOCK_SIZE);
+            String encryptedBlock = encryptBlock(counterBlock, key);
+            String decryptedBlock = bitwiseXOR(block, encryptedBlock);
+            decryptedBlocks.add(decryptedBlock);
+            counter++;
+        }
+        return decryptedBlocks;
     }
 }
