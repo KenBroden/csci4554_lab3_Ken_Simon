@@ -7,7 +7,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         // Define the file path to encrypt
-        String inputFilePath = "Text/turing_plaintext.txt"; // DEFINE THE FILE PATH HERE
+        String inputFilePath = "Text/deepblue_plaintext.txt"; // DEFINE THE FILE PATH HERE
 
         // Define key, generate IV, and read plaintext
         String key = "1111000 0101101 1100110 0001010 1000101"; // DEFINE THE KEY HERE
@@ -31,7 +31,7 @@ public class Main {
         String binaryPlainText = BlockEncrypt.asciiToBinary(plaintext);
 
         // Choose modes to encrypt with
-        String[] modes = { "CBC" }; // DEFINE THE MODES HERE
+        String[] modes = { "ECB" }; // DEFINE THE MODES HERE
 
         // Encrypt using the chosen modes
         for (String mode : modes) {
@@ -39,9 +39,9 @@ public class Main {
         }
 
         // Decryption process
-        String encryptedFilePath = "Text/jaydon_CTR_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
-        String decryptionMode = "CTR"; // DEFINE THE DECRYPTION MODE HERE
-        String decryptionIV = "1000100110001011101"; // DEFINE THE IV USED FOR ENCRYPTION HERE
+        String encryptedFilePath = "Text/deepblue_ECB_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
+        String decryptionMode = "ECB"; // DEFINE THE DECRYPTION MODE HERE
+        String decryptionIV = "10010010111001110000001001011001010"; // DEFINE THE IV USED FOR ENCRYPTION HERE
         String decryptionBinaryKey = "11110000101101110011000010101000101"; // DEFINE THE KEY USED FOR ENCRYPTION
   
 

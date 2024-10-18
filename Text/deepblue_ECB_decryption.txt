@@ -1,0 +1,29 @@
+Deep Blue was a chess-playing expert system run on a unique purpose-built IBM supercomputer. It was the first computer 
+to win a game, and the first to win a match, against a reigning world champion under regular time controls. Development 
+began in 1985 at Carnegie Mellon University under the name ChipTest. It then moved to IBM, where it was first renamed 
+Deep Thought, then again in 1989 to Deep Blue. It first played world champion Garry Kasparov in a six-game match in 1996, 
+where it lost four games to two. It was upgraded in 1997 and in a six-game re-match, it defeated Kasparov by winning two 
+games and drawing three. Deep Blue's victory is considered a milestone in the history of artificial intelligence and has 
+been the subject of several books and films.
+
+History
+While a doctoral student at Carnegie Mellon University, Feng-hsiung Hsu began development of a chess-playing supercomputer 
+under the name ChipTest. The machine won the North American Computer Chess Championship in 1987 and Hsu and his team 
+followed up with a successor, Deep Thought, in 1988.[2][3] After receiving his doctorate in 1989, Hsu and Murray Campbell 
+joined IBM Research to continue their project to build a machine that could defeat a world chess champion.[4] Their 
+colleague Thomas Anantharaman briefly joined them at IBM before leaving for the finance industry and being replaced by 
+programmer Arthur Joseph Hoane.[5][6] Jerry Brody, a long-time employee of IBM Research, subsequently joined the team 
+in 1990.[7]
+
+After Deep Thought's two-game 1989 loss to Kasparov, IBM held a contest to rename the chess machine: the winning name was 
+"Deep Blue", submitted by Peter Fitzhugh Brown,[8] was a play on IBM's nickname, "Big Blue".[a] After a scaled-down 
+version of Deep Blue played Grandmaster Joel Benjamin,[10] Hsu and Campbell decided that Benjamin was the expert they 
+were looking for to help develop Deep Blue's opening book, so hired him to assist with the preparations for Deep Blue's 
+matches against Garry Kasparov.[11] In 1995, a Deep Blue prototype played in the eighth World Computer Chess Championship, 
+playing Wchess to a draw before ultimately losing to Fritz in round five, despite playing as White.[12]
+
+Today, one of the two racks that made up Deep Blue is held by the National Museum of American History, having previously 
+been displayed in an exhibit about the Information Age,[13] while the other rack was acquired by the Computer History 
+Museum in 1997, and is displayed in the Revolution exhibit's "Artificial Intelligence and Robotics" gallery.[14] Several
+ books were written about Deep Blue, among them Behind Deep Blue: Building the Computer that Defeated the World Chess 
+ Champion by Deep Blue developer Feng-hsiung Hsu.[15]
