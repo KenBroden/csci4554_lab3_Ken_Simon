@@ -39,9 +39,9 @@ public class Main {
         }
 
         // Decryption process
-        String encryptedFilePath = "Text/jaydon_CBC_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
-        String decryptionMode = "CBC"; // DEFINE THE DECRYPTION MODE HERE
-        String decryptionIV = "10010010111001110000001001011001010"; // DEFINE THE IV USED FOR ENCRYPTION HERE
+        String encryptedFilePath = "Text/jaydon_CTR_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
+        String decryptionMode = "CTR"; // DEFINE THE DECRYPTION MODE HERE
+        String decryptionIV = "1000100110001011101"; // DEFINE THE IV USED FOR ENCRYPTION HERE
         String decryptionBinaryKey = "11110000101101110011000010101000101"; // DEFINE THE KEY USED FOR ENCRYPTION
   
 
