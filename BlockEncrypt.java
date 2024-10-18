@@ -108,11 +108,24 @@ public class BlockEncrypt {
     public static List<String> ECBMode(List<String> inputBlocks, String key) {
         List<String> encryptedBlocks = new ArrayList<>();
         for (String block : inputBlocks) {
-            String paddedBlock = padBlock(block);
-            String encryptedBlock = encryptBlock(paddedBlock, key);
+            block = padBlock(block);
+            String encryptedBlock = encryptBlock(block, key);
             encryptedBlocks.add(encryptedBlock);
         }
         return encryptedBlocks;
+    }
+
+    // ECB decryption
+    public static List<String> decryptECBMode(List<String> encryptedBlocks, String key) {
+        List<String> decryptedBlocks = new ArrayList<>();
+        for (String block : encryptedBlocks) {
+            String decryptedBlock = decryptBlock(block, key);
+            decryptedBlocks.add(decryptedBlock);
+        }
+        // Remove padding from the last block
+        int lastIndex = decryptedBlocks.size() - 1;
+        decryptedBlocks.set(lastIndex, removePadding(decryptedBlocks.get(lastIndex)));
+        return decryptedBlocks;
     }
 
     // Cipher Block Chaining (CBC) mode
@@ -148,17 +161,34 @@ public class BlockEncrypt {
     }
 
     // Cipher Feedback (CFB) mode
-    // each block of ciphertext is XORed with the output of the encryption function
+    // each block of plaintext is XORed with the output of the encryption function
     public static List<String> CFBMode(List<String> inputBlocks, String key, String iv) {
         List<String> encryptedBlocks = new ArrayList<>();
         String previousBlock = iv;
         for (String block : inputBlocks) {
+            block = padBlock(block);
             String encryptedBlock = encryptBlock(previousBlock, key);
             String cipherBlock = bitwiseXOR(block, encryptedBlock);
             encryptedBlocks.add(cipherBlock);
             previousBlock = cipherBlock;
         }
         return encryptedBlocks;
+    }
+
+    // CFB decryption
+    public static List<String> decryptCFBMode(List<String> encryptedBlocks, String key, String iv) {
+        List<String> decryptedBlocks = new ArrayList<>();
+        String previousBlock = iv;
+        for (String block : encryptedBlocks) {
+            String encryptedBlock = encryptBlock(previousBlock, key);
+            String decryptedBlock = bitwiseXOR(block, encryptedBlock);
+            decryptedBlocks.add(decryptedBlock);
+            previousBlock = block;
+        }
+        // Remove padding from the last block
+        int lastIndex = decryptedBlocks.size() - 1;
+        decryptedBlocks.set(lastIndex, removePadding(decryptedBlocks.get(lastIndex)));
+        return decryptedBlocks;
     }
 
     // Output Feedback (OFB) mode
