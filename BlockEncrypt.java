@@ -345,21 +345,23 @@ public class BlockEncrypt {
         System.out.println("\nCBCEncrypted Blocks: " + encryptedBlocks);
 
         // format the encrypted blocks
-        String formattedEncryptedBlocks = BlockEncrypt.formatBinaryString(BlockEncrypt.joinBinaryArray(encryptedBlocks));
-        System.out.println("CBCEncrypted Blocks (Formatted): \n" + formattedEncryptedBlocks);
+        String formattedEncryptedBlocks = BlockEncrypt
+                .formatBinaryString(BlockEncrypt.joinBinaryArray(encryptedBlocks));
+        System.out.println("\nCBCEncrypted Blocks (Formatted): \n" + formattedEncryptedBlocks);
 
         // Convert the formatted encrypted blocks back to an array of 35-bit blocks
         List<String> encryptedBlocksFormatted = BlockEncrypt.convertFormattedBinaryToBlocks(formattedEncryptedBlocks);
-        System.out.println("CBCEncrypted Blocks (Converted): " + encryptedBlocksFormatted);
+        System.out.println("\nCBCEncrypted Blocks (Converted): " + encryptedBlocksFormatted);
 
         // Decrypt the formatted encrypted blocks
         String unformattedEncryptedBlocks = BlockEncrypt.unformatBinaryString(formattedEncryptedBlocks);
         List<String> encryptedBlocksUnformatted = BlockEncrypt.splitBinaryArray(unformattedEncryptedBlocks);
         List<String> decryptedBlocks = BlockEncrypt.decryptCBCMode(encryptedBlocksUnformatted, binaryKey, iv);
         System.out.println("CBCDecrypted Blocks: " + decryptedBlocks);
-        
+
         // Convert the decrypted blocks back to ASCII
-        String cbcDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(BlockEncrypt.decryptCBCMode(encryptedBlocks, binaryKey, iv)));
+        String cbcDecryptedText = BlockEncrypt.binaryToAscii(
+                BlockEncrypt.joinBinaryArray(BlockEncrypt.decryptCBCMode(encryptedBlocks, binaryKey, iv)));
         System.out.println("CBCDecrypted Text: " + cbcDecryptedText);
 
         // Encrypt the plaintext using ECB mode
@@ -373,7 +375,7 @@ public class BlockEncrypt {
 
         // Convert the decrypted blocks back to ASCII
         String ecbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksECB));
-        System.out.println("ECBDecrypted Text: " + ecbDecryptedText);
+        System.out.println("\nECBDecrypted Text: " + ecbDecryptedText);
 
         // Encrypt the plaintext using CFB mode
         List<String> encryptedBlocksCFB = BlockEncrypt.CFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText),
@@ -386,7 +388,7 @@ public class BlockEncrypt {
 
         // Convert the decrypted blocks back to ASCII
         String cfbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksCFB));
-        System.out.println("CFBDecrypted Text: " + cfbDecryptedText);
+        System.out.println("\nCFBDecrypted Text: " + cfbDecryptedText);
 
         // Encrypt the plaintext using OFB mode
         List<String> encryptedBlocksOFB = BlockEncrypt.OFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText),

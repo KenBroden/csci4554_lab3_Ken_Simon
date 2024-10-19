@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        // ENCRYPTION:
         // Define the file path to encrypt
         String inputFilePath = "Text/deepblue_plaintext.txt"; // DEFINE THE FILE PATH HERE
 
@@ -38,7 +39,7 @@ public class Main {
             processEncryptionMode(mode.trim(), binaryPlainText, binaryKey, binaryIV, inputFilePath);
         }
 
-        // Decryption process
+        // DECRYPTION:
         String encryptedFilePath = "Text/deepblue_ECB_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
         String decryptionMode = "ECB"; // DEFINE THE DECRYPTION MODE HERE
         String decryptionIV = "10010010111001110000001001011001010"; // DEFINE THE IV USED FOR ENCRYPTION HERE
@@ -53,7 +54,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
             return;
-        }
+        } 
 
         // Validate the binary string
         validateBinaryString(encryptedText);
