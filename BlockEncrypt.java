@@ -287,6 +287,13 @@ public class BlockEncrypt {
         return blocks;
     }
 
+    // Method to introduce a 1-bit error in the ciphertext at a specific index
+    public static String introduceOneBitError(String ciphertext, int index) {
+        char bit = ciphertext.charAt(index);
+        char newBit = bit == '0' ? '1' : '0';
+        return ciphertext.substring(0, index) + newBit + ciphertext.substring(index + 1);
+    }
+
     // TESTING THE IMPLEMENTATION
     public static void main(String[] args) {
         String key = "a5Z#\t"; // Example key
@@ -344,13 +351,13 @@ public class BlockEncrypt {
         String binaryPlainText = BlockEncrypt.asciiToBinary(plainText);
 
         // Encrypt the plaintext using CBC mode
-        List<String> encryptedBlocks = BlockEncrypt.CBCMode(BlockEncrypt.splitBinaryArray(binaryPlainText),
+        List<String> encryptedBlocksCBC = BlockEncrypt.CBCMode(BlockEncrypt.splitBinaryArray(binaryPlainText),
                 binaryKey, iv);
-        System.out.println("\nCBCEncrypted Blocks: " + encryptedBlocks);
+        System.out.println("\nCBCEncrypted Blocks: " + encryptedBlocksCBC);
 
         // format the encrypted blocks
         String formattedEncryptedBlocks = BlockEncrypt
-                .formatBinaryString(BlockEncrypt.joinBinaryArray(encryptedBlocks));
+                .formatBinaryString(BlockEncrypt.joinBinaryArray(encryptedBlocksCBC));
         System.out.println("\nCBCEncrypted Blocks (Formatted): \n" + formattedEncryptedBlocks);
 
         // Convert the formatted encrypted blocks back to an array of 35-bit blocks
@@ -365,7 +372,7 @@ public class BlockEncrypt {
 
         // Convert the decrypted blocks back to ASCII
         String cbcDecryptedText = BlockEncrypt.binaryToAscii(
-                BlockEncrypt.joinBinaryArray(BlockEncrypt.decryptCBCMode(encryptedBlocks, binaryKey, iv)));
+                BlockEncrypt.joinBinaryArray(BlockEncrypt.decryptCBCMode(encryptedBlocksCBC, binaryKey, iv)));
         System.out.println("CBCDecrypted Text: " + cbcDecryptedText);
 
         // Encrypt the plaintext using ECB mode
@@ -420,5 +427,38 @@ public class BlockEncrypt {
         String ctrDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksCTR));
         System.out.println("CTRDecrypted Text: " + ctrDecryptedText);
 
+
+        // Task 4: Introduce a 1-bit error and observe the effect
+        System.out.println("\nTask 4: Observing 1-bit error effect");
+
+        // Define the index where the error will be introduced
+        int errorIndex = 10; // Example index
+
+        // Introduce a 1-bit error in the ciphertext for each mode
+        String corruptedEncryptedTextECB = introduceOneBitError(joinBinaryArray(encryptedBlocksECB), errorIndex);
+        String corruptedEncryptedTextCBC = introduceOneBitError(joinBinaryArray(encryptedBlocksCBC), errorIndex);
+        String corruptedEncryptedTextCFB = introduceOneBitError(joinBinaryArray(encryptedBlocksCFB), errorIndex);
+        String corruptedEncryptedTextOFB = introduceOneBitError(joinBinaryArray(encryptedBlocksOFB), errorIndex);
+        String corruptedEncryptedTextCTR = introduceOneBitError(joinBinaryArray(encryptedBlocksCTR), errorIndex);
+
+        // Decrypt the corrupted ciphertext for each mode
+        List<String> corruptedDecryptedBlocksECB = decryptECBMode(splitBinaryArray(corruptedEncryptedTextECB), binaryKey);
+        List<String> corruptedDecryptedBlocksCBC = decryptCBCMode(splitBinaryArray(corruptedEncryptedTextCBC), binaryKey, iv);
+        List<String> corruptedDecryptedBlocksCFB = decryptCFBMode(splitBinaryArray(corruptedEncryptedTextCFB), binaryKey, iv);
+        List<String> corruptedDecryptedBlocksOFB = decryptOFBMode(splitBinaryArray(corruptedEncryptedTextOFB), binaryKey, iv);
+        List<String> corruptedDecryptedBlocksCTR = decryptCTRMode(splitBinaryArray(corruptedEncryptedTextCTR), binaryKey, iv);
+
+        // Convert decrypted blocks back to ASCII and print results
+        String corruptedDecryptedTextECB = binaryToAscii(joinBinaryArray(corruptedDecryptedBlocksECB));
+        String corruptedDecryptedTextCBC = binaryToAscii(joinBinaryArray(corruptedDecryptedBlocksCBC));
+        String corruptedDecryptedTextCFB = binaryToAscii(joinBinaryArray(corruptedDecryptedBlocksCFB));
+        String corruptedDecryptedTextOFB = binaryToAscii(joinBinaryArray(corruptedDecryptedBlocksOFB));
+        String corruptedDecryptedTextCTR = binaryToAscii(joinBinaryArray(corruptedDecryptedBlocksCTR));
+
+        System.out.println("\nCorrupted Decrypted Text ECB: " + corruptedDecryptedTextECB);
+        System.out.println("\nCorrupted Decrypted Text CBC: " + corruptedDecryptedTextCBC);
+        System.out.println("\nCorrupted Decrypted Text CFB: " + corruptedDecryptedTextCFB);
+        System.out.println("\nCorrupted Decrypted Text OFB: " + corruptedDecryptedTextOFB);
+        System.out.println("\nCorrupted Decrypted Text CTR: " + corruptedDecryptedTextCTR);
     }
 }

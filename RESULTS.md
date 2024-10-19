@@ -454,3 +454,42 @@ My thoughts be bloody, or be nothing worth!
 
 - Hamlet, Act 4, Scene 4
 ```
+
+## Task 4: 1-bit error
+
+Here is the result of introducing the same 1 bit error in all of the ciphertexts from Task 2
+
+**Corrupted Decrypted Text ECB:**
+L)nux began in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
+The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its
+source code in 1991, it has grown from a small number of C files under a license prohibiting commercial distribution to
+the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
+Public License v2 with a syscall exception
+
+**Corrupted Decrypted Text CBC:**
+L)nux jegan in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
+The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its
+source code in 1991, it has grown from a small number of C files under a license prohibiting commercial distribution to
+the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
+Public License v2 with a syscall exception
+
+**Corrupted Decrypted Text CFB:**
+Lanux cegan in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
+The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its
+source code in 1991, it has grown from a small number of C files under a license prohibiting commercial distribution to
+the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
+Public License v2 with a syscall exception
+
+**Corrupted Decrypted Text OFB:**
+Lanux began in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
+The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its
+source code in 1991, it has grown from a small number of C files under a license prohibiting commercial distribution to
+the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
+Public License v2 with a syscall exception
+
+**Corrupted Decrypted Text CTR:**
+Lanux began in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
+The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its
+source code in 1991, it has grown from a small number of C files under a license prohibiting commercial distribution to
+the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
+Public License v2 with a syscall exception
