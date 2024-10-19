@@ -61,48 +61,48 @@ Ensure you have the Main.java file open in your workspace.
 ## Decryption
 
 1. Open Main.java:
-Ensure you have the `Main.java` file open in your workspace.
+    Ensure you have the `Main.java` file open in your workspace.
 
 2. Set the Encrypted File Path:
 
-Locate the line where the encrypted file path is defined:
+    Locate the line where the encrypted file path is defined:
 
-```java
-String encryptedFilePath = "Text/deepblue_ECB_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
-```
+    ```java
+    String encryptedFilePath = "Text/deepblue_ECB_ciphertext.txt"; // DEFINE THE CIPHERTEXT FILE PATH HERE
+    ```
 
-Replace "Text/deepblue_ECB_ciphertext.txt" with the path to your encrypted file.
+    Replace "Text/deepblue_ECB_ciphertext.txt" with the path to your encrypted file.
 
 3. Set the Decryption Key:
 
-Locate the line where the decryption key is defined:
+    Locate the line where the decryption key is defined:
 
-```java
-String decryptionBinaryKey = "1111000 0101101 1100110 0001010 1000101"; // DEFINE THE KEY USED FOR ENCRYPTION HERE
-```
+    ```java
+    String decryptionBinaryKey = "1111000 0101101 1100110 0001010 1000101"; // DEFINE THE KEY USED FOR ENCRYPTION HERE
+    ```
 
-Replace "1111000 0101101 1100110 0001010 1000101" with your decryption key.
+    Replace "1111000 0101101 1100110 0001010 1000101" with your decryption key.
 
 4. Set the Initialization Vector (IV) (if required by the mode):
 
-Locate the line where the IV is defined:
+    Locate the line where the IV is defined:
 
-```java
-String decryptionIV = "1001001 0111001 1100000 0100101 1001010"; // DEFINE THE IV USED FOR ENCRYPTION HERE
-```
+    ```java
+    String decryptionIV = "1001001 0111001 1100000 0100101 1001010"; // DEFINE THE IV USED FOR ENCRYPTION HERE
+    ```
 
-Replace "1001001 0111001 1100000 0100101 1001010" with the IV used during encryption. Note that ECB mode does not require an IV.
+    Replace "1001001 0111001 1100000 0100101 1001010" with the IV used during encryption. Note that ECB mode does not require an IV.
 
 5. Choose the Decryption Mode:
 
-Locate the line where the decryption mode is defined:
+    Locate the line where the decryption mode is defined:
 
-```java
-String decryptionMode = "ECB"; // DEFINE THE DECRYPTION MODE HERE
-```
+    ```java
+    String decryptionMode = "ECB"; // DEFINE THE DECRYPTION MODE HERE
+    ```
 
-Replace "ECB" with the desired decryption mode (e.g., "CBC", "CFB", "OFB", "CTR").
+    Replace "ECB" with the desired decryption mode (e.g., "CBC", "CFB", "OFB", "CTR").
 
 6. Run the Decryption:
 
-Save the changes to `Main.java`. Run the Main class to perform the decryption. The decrypted data will be written to a file in the Text directory with a name based on the input file and mode.
+    Save the changes to `Main.java`. Run the Main class to perform the decryption. The decrypted data will be written to a file in the Text directory with a name based on the input file and mode.
