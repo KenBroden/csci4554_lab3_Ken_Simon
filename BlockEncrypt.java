@@ -375,7 +375,7 @@ public class BlockEncrypt {
 
         // Convert the decrypted blocks back to ASCII
         String ecbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksECB));
-        System.out.println("\nECBDecrypted Text: " + ecbDecryptedText);
+        System.out.println("ECBDecrypted Text: " + ecbDecryptedText);
 
         // Encrypt the plaintext using CFB mode
         List<String> encryptedBlocksCFB = BlockEncrypt.CFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText),
@@ -388,7 +388,7 @@ public class BlockEncrypt {
 
         // Convert the decrypted blocks back to ASCII
         String cfbDecryptedText = BlockEncrypt.binaryToAscii(BlockEncrypt.joinBinaryArray(decryptedBlocksCFB));
-        System.out.println("\nCFBDecrypted Text: " + cfbDecryptedText);
+        System.out.println("CFBDecrypted Text: " + cfbDecryptedText);
 
         // Encrypt the plaintext using OFB mode
         List<String> encryptedBlocksOFB = BlockEncrypt.OFBMode(BlockEncrypt.splitBinaryArray(binaryPlainText),
