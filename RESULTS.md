@@ -1,6 +1,6 @@
 # Results
 
-- *Lab 4 Bin Packing by Ken Broden & Simon Harrison-Michaels*
+- *Lab 3 Block Cipher Modes by Ken Broden & Simon Harrison-Michaels*
 
 ## Task 1: implementing block cipher
 

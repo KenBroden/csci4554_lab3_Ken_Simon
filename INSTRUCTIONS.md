@@ -3,7 +3,7 @@
 ## Encryption
 
 1. Open Main.java:
-Ensure you have the Main.java file open in your workspace.
+    Ensure you have the Main.java file open in your workspace.
 
 2. Set the Input File Path:
 
