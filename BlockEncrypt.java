@@ -333,7 +333,11 @@ public class BlockEncrypt {
         System.out.println("IV: " + iv);
 
         // Define a plain text [JUST FOR TESTING FOR NOW - Ken]
-        String plainText = "Hello World! I love cryptography!";
+        String plainText = "Linux began in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel. \r\n" + //
+                        "The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its \r\n" + //
+                        "source code in 1991, it has grown from a small number of C files under a license prohibiting commercial distribution to \r\n" + //
+                        "the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General \r\n" + //
+                        "Public License v2 with a syscall exception ";
         System.out.println("Plaintext: " + plainText);
 
         // plaintext to binary
