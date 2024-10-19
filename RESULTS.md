@@ -466,12 +466,16 @@ source code in 1991, it has grown from a small number of C files under a license
 the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
 Public License v2 with a syscall exception
 
+Incorrect characters: 1
+
 **Corrupted Decrypted Text CBC:**
 L)nux jegan in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
 The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its
 source code in 1991, it has grown from a small number of C files under a license prohibiting commercial distribution to
 the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
 Public License v2 with a syscall exception
+
+Incorrect characters: 2
 
 **Corrupted Decrypted Text CFB:**
 Lanux cegan in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
@@ -480,6 +484,8 @@ source code in 1991, it has grown from a small number of C files under a license
 the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
 Public License v2 with a syscall exception
 
+Incorrect characters: 2
+
 **Corrupted Decrypted Text OFB:**
 Lanux began in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
 The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its
@@ -487,9 +493,20 @@ source code in 1991, it has grown from a small number of C files under a license
 the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
 Public License v2 with a syscall exception
 
+Incorrect characters: 1
+
 **Corrupted Decrypted Text CTR:**
 Lanux began in 1991 as a personal project by Finnish student Linus Torvalds to create a new free operating system kernel.
 The resulting Linux kernel has been marked by constant growth throughout its history. Since the initial release of its
 source code in 1991, it has grown from a small number of C files under a license prohibiting commercial distribution to
 the 4.15 version in 2018 with more than 23.3 million lines of source code, not counting comments, under the GNU General
 Public License v2 with a syscall exception
+
+Incorrect characters: 1
+
+**Task 4 results:**
+Regardless of where the 1 bit error is introduced, the error results in a 1 character error in the decryption of ECB, OFB,
+and CTR ciphertext. The 1 bit error results in 2 character errors in CBC and CFB ciphertext decryptions.  This behavior is
+due to the way each mode processes and propagates errors during decryption. In CBC and CFB modes, the error propagates to
+the next block due to the chaining mechanism, whereas in ECB, OFB, and CTR modes, the error is confined to the affected
+block or bit.

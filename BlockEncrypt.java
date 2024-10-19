@@ -294,6 +294,8 @@ public class BlockEncrypt {
         return ciphertext.substring(0, index) + newBit + ciphertext.substring(index + 1);
     }
 
+
+
     // TESTING THE IMPLEMENTATION
     public static void main(String[] args) {
         String key = "a5Z#\t"; // Example key
@@ -455,10 +457,14 @@ public class BlockEncrypt {
         String corruptedDecryptedTextOFB = binaryToAscii(joinBinaryArray(corruptedDecryptedBlocksOFB));
         String corruptedDecryptedTextCTR = binaryToAscii(joinBinaryArray(corruptedDecryptedBlocksCTR));
 
-        System.out.println("\nCorrupted Decrypted Text ECB: " + corruptedDecryptedTextECB);
-        System.out.println("\nCorrupted Decrypted Text CBC: " + corruptedDecryptedTextCBC);
-        System.out.println("\nCorrupted Decrypted Text CFB: " + corruptedDecryptedTextCFB);
-        System.out.println("\nCorrupted Decrypted Text OFB: " + corruptedDecryptedTextOFB);
-        System.out.println("\nCorrupted Decrypted Text CTR: " + corruptedDecryptedTextCTR);
+        System.out.println("\nCorrupted Decrypted Text ECB: \n" + corruptedDecryptedTextECB);
+
+        System.out.println("\nCorrupted Decrypted Text CBC: \n" + corruptedDecryptedTextCBC);
+
+        System.out.println("\nCorrupted Decrypted Text CFB: \n" + corruptedDecryptedTextCFB);
+
+        System.out.println("\nCorrupted Decrypted Text OFB: \n" + corruptedDecryptedTextOFB);
+
+        System.out.println("\nCorrupted Decrypted Text CTR: \n" + corruptedDecryptedTextCTR);
     }
 }
